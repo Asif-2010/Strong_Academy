@@ -1,0 +1,175 @@
+.public-home {
+  position: relative;
+  isolation: isolate;
+}
+
+.weather-background {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: #4d8db1;
+  background: linear-gradient(180deg, #eaf5fb66, #f7fbfd22 55%, #ffffff20);
+}
+
+.weather-particle {
+  position: absolute;
+  left: var(--particle-position);
+  top: -12%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.weather-rain {
+  background: linear-gradient(180deg, #8ebbd122, #eff8fc20 68%, #ffffff10);
+}
+
+.weather-rain .weather-particle {
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(transparent, #6398b8a8);
+  animation: weather-rain-fall var(--particle-duration) linear infinite;
+  animation-delay: var(--particle-delay);
+}
+
+.weather-rain .weather-particle:nth-child(3n) {
+  height: 48px;
+  opacity: .45;
+}
+
+.weather-snow {
+  color: #78a8c6;
+  background: linear-gradient(180deg, #eaf5fb77, #f8fcff2b 65%, #ffffff12);
+}
+
+.weather-snow .weather-particle {
+  width: var(--particle-size);
+  height: var(--particle-size);
+  border-radius: 50%;
+  background: #ffffffd9;
+  box-shadow: 0 0 8px #8bb6d45c;
+  animation: weather-snow-fall var(--particle-duration) linear infinite;
+  animation-delay: var(--particle-delay);
+}
+
+.weather-sun {
+  background:
+    radial-gradient(ellipse at 78% 8%, #ffe7a85c, transparent 38%),
+    linear-gradient(180deg, #fff8e733, #fffdf51a 60%, #ffffff12);
+  color: #d6aa4d;
+}
+
+.weather-sun-glow {
+  position: absolute;
+  top: -180px;
+  right: 8%;
+  width: min(540px, 75vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe79d30, #fff4ca16 48%, transparent 72%);
+  animation: weather-sun-breathe 8s ease-in-out infinite alternate;
+}
+
+.weather-sun .weather-particle {
+  top: var(--particle-top);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #e4be68b3;
+  box-shadow: 0 0 10px #efd58b;
+  animation: weather-light-float var(--particle-duration) ease-in-out infinite alternate;
+  animation-delay: var(--particle-delay);
+}
+
+.weather-wind {
+  background: linear-gradient(130deg, #e9f1f72b, #ffffff12 55%, #dcebf322);
+  color: #86a9bd;
+}
+
+.weather-wind .weather-particle {
+  top: var(--particle-top);
+  width: var(--particle-width);
+  height: 1px;
+  border-radius: 100%;
+  background: linear-gradient(90deg, transparent, #7ca4ba61, transparent);
+  animation: weather-wind-flow var(--particle-duration) ease-in-out infinite;
+  animation-delay: var(--particle-delay);
+}
+
+.weather-wind-swirls {
+  position: absolute;
+  inset: 0;
+}
+
+.weather-wind-swirls span {
+  position: absolute;
+  top: 15%;
+  left: 12%;
+  width: 180px;
+  height: 72px;
+  border: 1px solid #88aabd32;
+  border-left-color: transparent;
+  border-radius: 50%;
+  transform: rotate(-18deg);
+  animation: weather-swirl 18s linear infinite;
+}
+
+.weather-wind-swirls span:nth-child(2) {
+  top: 54%;
+  left: 63%;
+  width: 240px;
+  height: 90px;
+  animation-duration: 24s;
+  animation-direction: reverse;
+}
+
+.weather-wind-swirls span:nth-child(3) {
+  top: 78%;
+  left: 24%;
+  width: 130px;
+  height: 54px;
+  animation-duration: 20s;
+}
+
+@keyframes weather-rain-fall {
+  0% { opacity: 0; transform: translate3d(0, -8vh, 0) rotate(12deg); }
+  12% { opacity: .55; }
+  100% { opacity: 0; transform: translate3d(-5vw, 115vh, 0) rotate(12deg); }
+}
+
+@keyframes weather-snow-fall {
+  0% { opacity: 0; transform: translate3d(0, -8vh, 0); }
+  10% { opacity: .75; }
+  50% { transform: translate3d(3vw, 48vh, 0); }
+  100% { opacity: 0; transform: translate3d(-2vw, 112vh, 0); }
+}
+
+@keyframes weather-sun-breathe {
+  from { opacity: .55; transform: scale(.96); }
+  to { opacity: .95; transform: scale(1.04); }
+}
+
+@keyframes weather-light-float {
+  from { opacity: .25; transform: translate3d(-8px, 8px, 0) scale(.8); }
+  to { opacity: .8; transform: translate3d(10px, -12px, 0) scale(1.2); }
+}
+
+@keyframes weather-wind-flow {
+  0% { opacity: 0; transform: translate3d(-15vw, 0, 0) scaleX(.7); }
+  35% { opacity: .65; }
+  100% { opacity: 0; transform: translate3d(95vw, -12px, 0) scaleX(1.2); }
+}
+
+@keyframes weather-swirl {
+  to { transform: rotate(342deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-background .weather-particle,
+  .weather-sun-glow,
+  .weather-wind-swirls span {
+    animation: none;
+    opacity: .35;
+  }
+}
