@@ -4411,6 +4411,26 @@ footer small {
 .dashboard-topbar-context strong { font-size: 14px; }
 .api-dashboard .manager-account-name { color: var(--dashboard-ink); font-weight: 700; }
 .api-dashboard .manager-avatar { background: var(--dashboard-blue); }
+.api-dashboard {
+  --dashboard-bg: #f3f6fc;
+  --dashboard-navy: #14213d;
+  --dashboard-blue: #2563eb;
+  --dashboard-ink: #172033;
+  --dashboard-muted: #64748b;
+  --dashboard-border: #e2e8f0;
+  background: var(--dashboard-bg);
+  color: var(--dashboard-ink);
+}
+.api-dashboard .manager-topbar { min-height: 76px; padding: 0 clamp(20px, 4vw, 54px); background: #fff; border-bottom: 1px solid var(--dashboard-border); box-shadow: 0 4px 18px #1725540a; }
+.api-dashboard .manager-brand { min-width: 190px; color: var(--dashboard-ink); }
+.api-dashboard .manager-brand-logo { display: none; }
+.api-dashboard .manager-brand small { color: var(--dashboard-muted); }
+.api-dashboard .dashboard-topbar-context { border-left-color: var(--dashboard-border); }
+.api-dashboard .dashboard-topbar-kicker { color: #94a3b8; }
+.api-dashboard .dashboard-header-logo { width: 116px; height: 42px; object-fit: contain; margin-right: 14px; }
+.api-dashboard .manager-account { gap: 12px; }
+.api-dashboard .manager-account-name { color: var(--dashboard-ink); font-weight: 700; }
+.api-dashboard .manager-avatar { background: #dbeafe; color: var(--dashboard-blue); }
 .api-dashboard .manager-logout { color: var(--dashboard-muted); }
 
 .api-dashboard .dashboard-layout { display: grid; grid-template-columns: 258px minmax(0, 1fr); min-height: calc(100vh - 76px); }
@@ -4433,6 +4453,10 @@ footer small {
 .api-dashboard .dashboard-sidebar-actions { border-top-color: #294078; }
 
 .api-dashboard .manager-main { max-width: none; padding: 34px clamp(22px, 4vw, 54px) 64px; }
+.api-dashboard .manager-page-heading { margin-bottom: 28px; }
+.api-dashboard .manager-kicker { color: var(--dashboard-blue); letter-spacing: .18em; }
+.api-dashboard .manager-page-heading h1 { color: var(--dashboard-ink); font-size: clamp(30px, 3vw, 42px); letter-spacing: -.035em; }
+.api-dashboard .manager-page-heading p { color: var(--dashboard-muted); max-width: 760px; }
 .api-dashboard .manager-page-heading { margin-bottom: 26px; }
 .api-dashboard .manager-kicker { color: var(--dashboard-blue); letter-spacing: .16em; }
 .api-dashboard .manager-page-heading h1 { color: var(--dashboard-ink); font-size: clamp(27px, 3vw, 38px); letter-spacing: -.035em; }
@@ -4444,6 +4468,13 @@ footer small {
 .api-dashboard .manager-stat-label { color: var(--dashboard-muted); font-weight: 700; }
 .api-dashboard .manager-stat strong { color: var(--dashboard-ink); font-size: 30px; }
 .api-dashboard .manager-panel, .api-dashboard .dashboard-profile-card, .api-dashboard .overview-summary-card { border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 8px 24px #1725540b; }
+.api-dashboard .manager-panel-heading h2, .api-dashboard .dashboard-profile-details h2 { color: var(--dashboard-ink); }
+.api-dashboard .manager-table th { color: #475569; background: #f8fafc; }
+.api-dashboard .manager-table tbody tr { transition: background .18s ease; }
+.api-dashboard .manager-table tbody tr:hover { background: #f8fbff; }
+.api-dashboard input:focus, .api-dashboard select:focus, .api-dashboard textarea:focus { border-color: var(--dashboard-blue); box-shadow: 0 0 0 3px #2563eb1c; }
+.api-dashboard .manager-button-primary, .api-dashboard .primary-button { background: var(--dashboard-blue); }
+.api-dashboard .manager-button-primary:hover, .api-dashboard .primary-button:hover { background: #1d4ed8; }
 .api-dashboard .manager-panel { background: #fff; }
 .api-dashboard .overview-summary-grid { gap: 16px; }
 .api-dashboard .overview-summary-card { background: #fff; transition: transform .2s ease, box-shadow .2s ease; }
@@ -4463,6 +4494,7 @@ footer small {
 
 @media (max-width: 760px) {
   .api-dashboard .manager-topbar { padding: 0 16px; }
+  .api-dashboard .dashboard-header-logo { width: 88px; height: 34px; margin-right: 2px; }
   .dashboard-topbar-context { display: none; }
   .api-dashboard .dashboard-layout { display: block; }
   .api-dashboard .dashboard-sidebar { min-height: auto; padding: 15px 12px; }

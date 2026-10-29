@@ -216,6 +216,12 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
+    account_password = serializers.CharField(
+        write_only=True, required=False, trim_whitespace=False
+    )
+    confirm_password = serializers.CharField(
+        write_only=True, required=False, trim_whitespace=False
+    )
     attendance_percentage = serializers.SerializerMethodField()
     course = serializers.PrimaryKeyRelatedField(
         queryset=Course.objects.all(), write_only=True, required=False
@@ -230,7 +236,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProfile
         fields = (
-            "id", "student_id", "full_name", "email", "phone", "qualification", "resume", "joining_date",
+            "id", "student_id", "full_name", "email", "account_password", "confirm_password", "phone", "qualification", "resume", "joining_date",
             "enrollment_status", "attendance_percentage", "user", "course",
             "batch", "course_id", "batch_id", "course_name", "batch_name",
         )
@@ -252,10 +258,17 @@ class StudentSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         request = self.context.get("request")
-        if "account_password" in self.initial_data:
-            raise serializers.ValidationError({
-                "account_password": "Student login accounts are not created from student records."
-            })
+        if self.instance is None:
+            password = self.initial_data.get("account_password", "")
+            confirm_password = self.initial_data.get("confirm_password", "")
+            if not password:
+                raise serializers.ValidationError({"account_password": "A login password is required."})
+            if password != confirm_password:
+                raise serializers.ValidationError({"confirm_password": "Passwords do not match."})
+            try:
+                validate_password(password)
+            except DjangoValidationError as error:
+                raise serializers.ValidationError({"account_password": list(error.messages)}) from error
         if request and request.user.profile.role == "student":
             editable_fields = {"full_name", "email", "phone", "qualification", "resume"}
             forbidden_fields = set(self.initial_data) - editable_fields
@@ -271,9 +284,9 @@ class StudentSerializer(serializers.ModelSerializer):
         enrollment = self._primary_enrollment(self.instance) if self.instance else None
         course = attrs.get("course", enrollment.course if enrollment else None)
         batch = attrs.get("batch", enrollment.batch if enrollment else None)
-        if bool(course) != bool(batch):
+        if batch and not course:
             raise serializers.ValidationError({
-                "batch": "Select both a course and a batch to enroll the student."
+                "course": "Select a course before selecting a batch."
             })
         if course and batch and batch.course_id != course.id:
             raise serializers.ValidationError({
@@ -321,9 +334,20 @@ class StudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         course = validated_data.pop("course", None)
         batch = validated_data.pop("batch", None)
+        password = validated_data.pop("account_password")
+        validated_data.pop("confirm_password", None)
+        email = validated_data["email"]
+        full_name = validated_data["full_name"]
 
         with transaction.atomic():
-            student = super().create(validated_data)
+            user = User.objects.create_user(
+                username=StudentRegistrationSerializer._new_username(email),
+                email=email,
+                first_name=full_name[:150],
+                password=password,
+            )
+            Profile.objects.create(user=user, role="student")
+            student = super().create({**validated_data, "user": user})
             if course and batch:
                 enrollment_status = {
                     "completed": "completed",

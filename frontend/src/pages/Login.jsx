@@ -145,9 +145,6 @@ export default function Login() {
           <div className="auth-divider"><span>OR</span></div>
           <GoogleLoginButton onCredential={handleGoogleCredential} disabled={loading} />
 
-          <p className="auth-register-link">
-            New to STRONG Academy? <Link to="/register">Create New User</Link>
-          </p>
           <Link className="auth-back-home" to="/">Back to home</Link>
         </section>
       </section>

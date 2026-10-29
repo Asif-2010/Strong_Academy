@@ -64,11 +64,12 @@ const resources = [
       { name: "student_id", label: "Student ID", required: true, roles: ["hr", "manager"] },
       { name: "full_name", label: "Full name", required: true, roles: ["hr", "manager", "student"] },
       { name: "email", label: "Student login email", type: "email", required: true, roles: ["hr", "manager", "student"] },
+      { name: "account_password", label: "Student login password", type: "password", required: true, createOnly: true, roles: ["hr"] },
+      { name: "confirm_password", label: "Confirm login password", type: "password", required: true, createOnly: true, roles: ["hr"] },
       { name: "phone", label: "Phone", roles: ["hr", "manager", "student"] },
       { name: "qualification", label: "Qualification / education", type: "textarea", roles: ["hr", "student"] },
       { name: "joining_date", label: "Joining date", type: "date", required: true, roles: ["hr", "manager"] },
       { name: "course", label: "Course", type: "relation", source: "courses", required: true, roles: ["hr", "manager"] },
-      { name: "batch", label: "Batch", type: "relation", source: "batches", filterBy: "course", required: true, roles: ["hr", "manager"] },
       { name: "enrollment_status", label: "Enrollment status", type: "select", options: ["active", "completed", "inactive"], defaultValue: "active", required: true, roles: ["hr", "manager"] },
     ],
     addRoles: ["hr"], editRoles: ["hr"], deleteRoles: ["hr"],
@@ -98,8 +99,6 @@ const resources = [
       { name: "description", label: "Description", type: "textarea" },
       { name: "duration", label: "Duration", type: "select", options: ["weekly", "weekday", "2_months", "3_months", "4_months"], defaultValue: "2_months", required: true },
       { name: "schedule_type", label: "Schedule type", type: "select", options: ["weekly", "weekday"], defaultValue: "weekly", required: true },
-      { name: "start_date", label: "Start date", type: "date", optional: true },
-      { name: "end_date", label: "End date", type: "date", optional: true },
       { name: "trainers", label: "Assigned trainers", type: "multi", source: "trainers", optional: true, roles: ["hr"] },
       { name: "status", label: "Course status", type: "select", options: ["proposed", "active", "inactive", "archived"], defaultValue: "active", required: true, roles: ["hr"] },
       { name: "placement_preparation", label: "Placement preparation", type: "textarea" },
@@ -1577,7 +1576,7 @@ export default function Dashboard({ roleOverride }) {
     <div className="manager-dashboard api-dashboard">
       <header className="manager-topbar">
         <a className="manager-brand" href="/">
-          <img className="manager-brand-logo" src="/strong-logo.png" alt="STRONG Academy logo" />
+          <img className="dashboard-header-logo" src="/strong-logo.png" alt="STRONG Academy logo" />
           <span><strong>STRONG ACADEMY</strong><small>{role.toUpperCase()} PORTAL</small></span>
         </a>
         <div className="dashboard-topbar-context">
@@ -1608,10 +1607,6 @@ export default function Dashboard({ roleOverride }) {
 
       <div className="dashboard-layout">
         <aside className="dashboard-sidebar">
-          <div className="dashboard-sidebar-brand">
-            <img src="/strong-logo.png" alt="" />
-            <div><strong>STRONG</strong><span>ACADEMY</span></div>
-          </div>
           <span className="dashboard-sidebar-label">WORKSPACE</span>
           <nav aria-label={`${roleCopy[role].title} sections`}>
             <button
@@ -1724,7 +1719,7 @@ export default function Dashboard({ roleOverride }) {
             />
           )}
 
-          {((role === "manager" && isOverview) || (role !== "manager" && !isOverview)) && <section className="manager-stats" aria-label="Dashboard summary">
+          {role === "manager" && isOverview && <section className="manager-stats" aria-label="Dashboard summary">
             {(statCards[role] || []).map(([key, label]) => (
               <article className="manager-stat" key={key}>
                 <span className="manager-stat-icon stat-teal"><FiActivity /></span>
@@ -1784,16 +1779,6 @@ export default function Dashboard({ roleOverride }) {
               error={overviewError}
               navigate={navigate}
             />
-          )}
-
-          {role === "manager" && isOverview && (
-            <section className="manager-panel manager-hr-account" aria-label="HR Gmail account">
-              <div>
-                <span className="manager-panel-label">HR ACCOUNT</span>
-                <h2><FiMail aria-hidden="true" /> Gmail account</h2>
-              </div>
-              <p><span>HR Gmail address</span><strong>Not configured</strong></p>
-            </section>
           )}
 
           {role === "student" && activeKey === "students" && studentProfile && (
