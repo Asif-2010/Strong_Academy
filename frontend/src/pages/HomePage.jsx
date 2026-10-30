@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiBookOpen, FiCheckCircle, FiCompass, FiMessageCircle } from "react-icons/fi";
 import PublicCourseCard from "../components/PublicCourseCard";
+import PublicEnquiryForm from "../components/PublicEnquiryForm";
 import WeatherBackground from "../components/WeatherBackground";
 import usePublicList from "../hooks/usePublicList";
 
@@ -146,6 +147,15 @@ export default function HomePage() {
         <span className="public-contact-icon"><FiMessageCircle aria-hidden="true" /></span>
         <div><span className="public-eyebrow">LET'S TALK ABOUT YOUR GOALS</span><h2>Have a question about training?</h2><p>Send an enquiry for academy staff to review.</p></div>
         <Link className="public-button public-button-primary" to="/contact">Contact us <FiArrowRight aria-hidden="true" /></Link>
+      </section>
+
+      <section className="public-section public-home-enquiry">
+        <div className="public-section-heading">
+          <span className="public-eyebrow">CONTACT STRONG ACADEMY</span>
+          <h2>Tell us what you would like to learn</h2>
+          <p>Send a course, general, or placement enquiry. Our team will review your message.</p>
+        </div>
+        <PublicEnquiryForm />
       </section>
     </div>
   );

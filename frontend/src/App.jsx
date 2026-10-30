@@ -20,6 +20,8 @@ export default function App() {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+
     if (pathname !== "/") {
       sessionStorage.removeItem("ssa_home_visit_active");
       sessionStorage.removeItem("ssa_home_visit_weather");

@@ -249,10 +249,10 @@ const featureSectionsByRole = {
 
 const statCards = {
   manager: [
-    ["students", "Total students"],
-    ["trainers", "Total trainers"],
-    ["hr_staff", "Total HR staff"],
-    ["courses", "Total courses"],
+    ["students", "Total students", "students"],
+    ["trainers", "Total trainers", "trainers"],
+    ["hr_staff", "Total HR staff", "hr-staff"],
+    ["courses", "Total courses", "courses"],
   ],
   hr: [
     ["students", "Total students"], 
@@ -1720,8 +1720,20 @@ export default function Dashboard({ roleOverride }) {
           )}
 
           {role === "manager" && isOverview && <section className="manager-stats" aria-label="Dashboard summary">
-            {(statCards[role] || []).map(([key, label]) => (
-              <article className="manager-stat" key={key}>
+            {(statCards[role] || []).map(([key, label, target]) => (
+              <article
+                className="manager-stat"
+                key={key}
+                role={target ? "button" : undefined}
+                tabIndex={target ? 0 : undefined}
+                onClick={target ? () => navigate(`/dashboard/${role}/${target}`) : undefined}
+                onKeyDown={target ? (event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    navigate(`/dashboard/${role}/${target}`);
+                  }
+                } : undefined}
+              >
                 <span className="manager-stat-icon stat-teal"><FiActivity /></span>
                 <span className="manager-stat-label">{label}</span>
                 <strong>{statistics[key] ?? 0}</strong>
@@ -1729,30 +1741,6 @@ export default function Dashboard({ roleOverride }) {
             ))}
           </section>}
 
-          {role === "manager" && isOverview && (
-            <section className="dashboard-profile-card" aria-label="Your profile">
-              <div className="dashboard-profile-picture">
-                {profilePhotoUrl
-                  ? <img src={profilePhotoUrl} alt={`${user.username} profile`} />
-                  : <span>{user.username?.[0]?.toUpperCase() || role[0].toUpperCase()}</span>}
-              </div>
-              <div className="dashboard-profile-details">
-                <span className="manager-panel-label">YOUR PROFILE</span>
-                <h2>{user.full_name || user.username}</h2>
-                <p>{user.email || roleCopy[role].title}</p>
-                <button
-                  className="manager-button manager-button-secondary"
-                  type="button"
-                  onClick={() => {
-                    setProfilePhotoError("");
-                    setProfilePhotoModal(true);
-                  }}
-                >
-                  {profilePhotoUrl ? "Replace profile picture" : "Add profile picture"}
-                </button>
-              </div>
-            </section>
-          )}
           {isOverview && (error || profilePhotoError) && (
             <p className="dashboard-feedback dashboard-error" role="alert">
               {profilePhotoError || error}
